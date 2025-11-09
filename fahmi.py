@@ -115,7 +115,7 @@ def generate_modul_ajar(user_data, phase_data):
 
     # Panggil API
     try:
-        with st.spinner(f"🤖 AI ({MODEL_NAME}) sedang menyusun Modul Ajar Anda..."):
+        with st.spinner(f"sedang menyusun Modul Ajar Anda..."):
             response = client.models.generate_content(
                 model=MODEL_NAME,
                 contents=[system_prompt],
@@ -132,11 +132,11 @@ def generate_modul_ajar(user_data, phase_data):
 # --- Interface Streamlit ---
 
 st.set_page_config(
-    page_title="Modul Ajar Generator (Gemini-Powered)",
+    page_title="Modul Ajar Generator",
     layout="wide"
 )
 
-st.title("📚 Modul Ajar Generator (Gemini-Powered)")
+st.title("📚 Modul Ajar Generator")
 st.caption("Alat bantu untuk guru menyusun Modul Ajar Kumer otomatis.")
 
 # Inisialisasi Session State
@@ -253,4 +253,5 @@ if st.session_state['modul_content']:
         data=st.session_state['modul_content'],
         file_name=st.session_state['file_name'],
         mime="text/markdown"
+
     )
