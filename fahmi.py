@@ -2,20 +2,20 @@ import streamlit as st
 from google import genai
 from google.genai.errors import APIError
 
-# --- Konfigurasi Gemini API Key ---
-# ⚠️ PENTING: Ganti string ini dengan Kunci API Gemini Anda yang sebenarnya.
-# Hardcoding Kunci API tidak disarankan untuk aplikasi produksi/publik.
-GEMINI_API_KEY = "AIzaSyCV80AVf2cNSEYyIGwGIigPzS2dDeY5v0o" 
-
-# Inisialisasi Klien Gemini
+# --- Konfigurasi Gemini API Key yang Aman menggunakan st.secrets ---
 client = None
-MODEL_NAME = "gemini-2.5-pro" # Direkomendasikan untuk tugas kompleks
+MODEL_NAME = "gemini-2.5-pro" 
 
-if GEMINI_API_KEY == "ISI_GEMINI_API_KEY_ANDA" or not GEMINI_API_KEY:
-    st.error("⚠️ Harap ganti 'ISI_GEMINI_API_KEY_ANDA' di dalam file 'app.py' dengan Kunci API Gemini Anda.")
-else:
+try:
+    # Ambil kunci API dari Streamlit Secrets
+    # Catatan: Kunci ini TIDAK ADA di GitHub, hanya di Streamlit Cloud Settings
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"] 
+except KeyError:
+    st.error("⚠️ Kunci API Gemini tidak ditemukan dalam Streamlit Secrets. Harap atur di pengaturan deployment.")
+    GEMINI_API_KEY = None # Nonaktifkan client jika kunci gagal dimuat
+
+if GEMINI_API_KEY:
     try:
-        # Pengecekan sederhana apakah kunci API sudah diisi
         client = genai.Client(api_key=GEMINI_API_KEY)
     except Exception as e:
         st.error(f"Gagal menginisialisasi Gemini Client: {e}")
@@ -255,3 +255,4 @@ if st.session_state['modul_content']:
         mime="text/markdown"
 
     )
+
